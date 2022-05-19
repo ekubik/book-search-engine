@@ -27,23 +27,21 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-    addUser: async (parent, { username, email, password }) => {
-      const user = await User.create({
-        username,
-        email,
-        password,
-      });
+    addUser: async (parent, { args }) => {
+      const user = await User.create(args);
       const token = signToken(user);
+      console.log(user);
       return { token, user };
     },
     saveBook: async (parent, args, context) => {
+      console.log(context.user);
       if (context.user) {
         await User.findOneAndUpdate(
           { _id: context.user._id },
           { $addToSet: { savedBooks: { ...args } } },
           { new: true }
         );
-      }
+      } 
       throw new AuthenticationError("You need to be logged in to save a book");
     },
     removeBook: async (parent, { bookId }, context) => {
