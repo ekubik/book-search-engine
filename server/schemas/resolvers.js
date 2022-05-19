@@ -27,8 +27,8 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-    addUser: async (parent, { args }) => {
-      const user = await User.create(args);
+    addUser: async (parent, { username, email, password }) => {
+      const user = await User.create({username, email, password});
       const token = signToken(user);
       console.log(user);
       return { token, user };
@@ -42,7 +42,7 @@ const resolvers = {
           { new: true }
         );
       } 
-      throw new AuthenticationError("You need to be logged in to save a book");
+     // throw new AuthenticationError("You need to be logged in to save a book");
     },
     removeBook: async (parent, { bookId }, context) => {
       if (context.user) {
